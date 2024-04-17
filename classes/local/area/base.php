@@ -63,13 +63,13 @@ abstract class base {
 
         // Remove completions for non-existent fields.
         $sql = "DELETE
-                  FROM {customfield_training_completions} ctc
+                  FROM {customfield_training_completions}
                  WHERE NOT EXISTS (
 
                     SELECT 'x'
                       FROM {customfield_data} cd
                       JOIN {customfield_field} cf ON cf.id = cd.fieldid AND cf.type = 'training'
-                     WHERE ctc.fieldid = cf.id AND cd.intvalue > 0
+                     WHERE {customfield_training_completions}.fieldid = cf.id AND cd.intvalue > 0
 
                  )";
         $DB->execute($sql);
@@ -81,12 +81,12 @@ abstract class base {
 
         // Remove completions for non-existent users.
         $sql = "DELETE
-                  FROM {customfield_training_completions} ctc
+                  FROM {customfield_training_completions}
                  WHERE NOT EXISTS (
 
                     SELECT 'x'
                       FROM {user} u
-                     WHERE ctc.userid = u.id AND u.deleted = 0 AND u.confirmed = 1
+                     WHERE {customfield_training_completions}.userid = u.id AND u.deleted = 0 AND u.confirmed = 1
 
                  )";
         $DB->execute($sql);

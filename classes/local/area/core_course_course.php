@@ -49,14 +49,14 @@ final class core_course_course extends base {
 
         // Remove completions for non-existent course completions.
         $sql = "DELETE
-                  FROM {customfield_training_completions} ctc
+                  FROM {customfield_training_completions}
                  WHERE EXISTS (
 
                     SELECT 'x'
                       FROM {customfield_data} cd
                       JOIN {customfield_field} cf ON cf.id = cd.fieldid AND cf.type = 'training'
                       JOIN {customfield_category} cat ON cat.id = cf.categoryid AND cat.component = 'core_course' AND cat.area = 'course'
-                     WHERE ctc.fieldid = cf.id
+                     WHERE {customfield_training_completions}.fieldid = cf.id
 
                  ) AND NOT EXISTS (
 
@@ -65,7 +65,9 @@ final class core_course_course extends base {
                       JOIN {customfield_data} cd ON cd.instanceid = cc.course
                       JOIN {customfield_field} cf ON cf.id = cd.fieldid AND cf.type = 'training'
                       JOIN {customfield_category} cat ON cat.id = cf.categoryid AND cat.component = 'core_course' AND cat.area = 'course'
-                     WHERE ctc.fieldid = cf.id AND ctc.instanceid = cd.instanceid AND ctc.userid = cc.userid
+                     WHERE {customfield_training_completions}.fieldid = cf.id
+                           AND {customfield_training_completions}.instanceid = cd.instanceid
+                           AND {customfield_training_completions}.userid = cc.userid
 
                  )";
         $DB->execute($sql);
@@ -157,13 +159,14 @@ final class core_course_course extends base {
         $params = ['courseid' => $event->courseid];
 
         $sql = "DELETE
-                  FROM {customfield_training_completions} ctc
-                 WHERE ctc.instanceid = :courseid AND EXISTS (
+                  FROM {customfield_training_completions}
+                 WHERE instanceid = :courseid AND EXISTS (
 
                     SELECT 'x'
                       FROM {customfield_field} cf
                       JOIN {customfield_category} cat ON cat.id = cf.categoryid AND cat.component = 'core_course' AND cat.area = 'course'
-                     WHERE ctc.fieldid = cf.id AND cf.type = 'training'
+                     WHERE {customfield_training_completions}.fieldid = cf.id
+                           AND cf.type = 'training'
 
                  )";
         $DB->execute($sql, $params);
