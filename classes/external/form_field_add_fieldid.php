@@ -17,8 +17,8 @@
 namespace customfield_training\external;
 
 use customfield_training\local\framework;
-use external_function_parameters;
-use external_value;
+use core_external\external_function_parameters;
+use core_external\external_value;
 
 /**
  * Provides list of candidates for adding fields to framework.
