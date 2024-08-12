@@ -161,7 +161,6 @@ Feature: Managers can manage training frameworks
     Then the following should exist in the "customfield_training_fields_table" table:
       | Name             | Short name | Component   | Area   |
       | Training Field 1 | training1  | core_course | course |
-    # For some weird reason webdriver is running out of memory here...
 
   Scenario: Add training frameworks via generator
     When the following "customfield_training > frameworks" exist:

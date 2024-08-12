@@ -32,7 +32,7 @@ require_once($CFG->libdir . '/tablelib.php');
  */
 final class fields extends \table_sql {
 
-    const DEFAULT_PERPAGE = 99999;
+    const DEFAULT_PERPAGE = 99;
     protected $framework;
 
     public function __construct(moodle_url $url, stdClass $framework) {
