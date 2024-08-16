@@ -43,7 +43,7 @@ final class core_course_course extends base {
                   JOIN {customfield_category} cat ON cat.id = cf.categoryid AND cat.component = 'core_course' AND cat.area = 'course'
                   JOIN {user} u ON u.id = cc.userid AND u.deleted = 0 AND u.confirmed = 1   
              LEFT JOIN {customfield_training_completions} ctc ON ctc.fieldid = cd.fieldid AND ctc.instanceid = cd.instanceid AND ctc.userid = cc.userid
-                 WHERE ctc.id IS NULL
+                 WHERE ctc.id IS NULL AND cc.timecompleted IS NOT NULL
               ORDER BY cc.timecompleted ASC";
         $DB->execute($sql);
 
@@ -68,6 +68,7 @@ final class core_course_course extends base {
                      WHERE {customfield_training_completions}.fieldid = cf.id
                            AND {customfield_training_completions}.instanceid = cd.instanceid
                            AND {customfield_training_completions}.userid = cc.userid
+                           AND cc.timecompleted IS NOT NULL
 
                  )";
         $DB->execute($sql);
@@ -92,7 +93,7 @@ final class core_course_course extends base {
                           JOIN {customfield_field} cf ON cf.id = cd.fieldid AND cf.type = 'training'
                           JOIN {customfield_category} cat ON cat.id = cf.categoryid AND cat.component = 'core_course' AND cat.area = 'course'
                          WHERE ctc.fieldid = cf.id AND ctc.instanceid = cd.instanceid AND ctc.userid = cc.userid
-                               AND ctc.timecompleted <> cc.timecompleted
+                               AND ctc.timecompleted <> cc.timecompleted AND cc.timecompleted IS NOT NULL
                      
                  )
         ";
@@ -107,6 +108,9 @@ final class core_course_course extends base {
 
         // NOTE: do not check course_completions.reaggregate here!
         $completion = $event->get_record_snapshot('course_completions', $event->objectid);
+        if ($completion->timecompleted === null) {
+            return;
+        }
 
         $sql = "SELECT cf.*, ctc.id AS ctcid
                   FROM {customfield_field} cf

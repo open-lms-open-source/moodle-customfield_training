@@ -90,6 +90,9 @@ final class core_course_course_test extends \advanced_testcase {
         $ccompletion->mark_complete();
         $ccompletion = new \completion_completion(array('course' => $course4->id, 'userid' => $user1->id));
         $ccompletion->mark_complete();
+        $ccompletion = new \completion_completion(array('course' => $course4->id, 'userid' => $user4->id));
+        $ccompletion->mark_complete();
+        $DB->set_field('course_completions', 'timecompleted', null, ['id' => $ccompletion->id]);
 
         $DB->delete_records('customfield_training_completions', []);
 
@@ -128,6 +131,16 @@ final class core_course_course_test extends \advanced_testcase {
         core_course_course::sync_area_completions();
         $completions2 = $DB->get_records('customfield_training_completions', [], 'id ASC');
         $this->assertEquals($completions, $completions2);
+
+        // Remove pending null completions.
+        $DB->set_field('course_completions', 'timecompleted', null, ['userid' => $user2->id, 'course' => $course1->id]);
+        core_course_course::sync_area_completions();
+        $completions = $DB->get_records('customfield_training_completions', [], 'id ASC');
+        $this->assertCount(1, $completions);
+        $this->assertFalse($DB->record_exists('customfield_training_completions',
+            ['fieldid' => $field1->get('id'), 'instanceid' => $course1->id, 'userid' => $user2->id]));
+        $this->assertFalse($DB->record_exists('customfield_training_completions',
+            ['fieldid' => $field2->get('id'), 'instanceid' => $course1->id, 'userid' => $user2->id]));
     }
 
     public function test_observe_course_completed() {
