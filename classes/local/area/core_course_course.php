@@ -17,7 +17,7 @@
 namespace customfield_training\local\area;
 
 /**
- * Custom field area base.
+ * Course completion training field.
  *
  * @package    customfield_training
  * @copyright  2024 Open LMS (https://www.openlms.net/)
@@ -25,10 +25,19 @@ namespace customfield_training\local\area;
  * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 final class core_course_course extends base {
+    /**
+     * SQL select for the area fields.
+     *
+     * @param string $alias custom field category table
+     * @return string
+     */
     public static function get_category_select(string $alias): string {
         return "$alias.component = 'core_course' AND $alias.area = 'course'";
     }
 
+    /**
+     * Synchronise cached values of course completions.
+     */
     public static function sync_area_completions(): void {
         global $DB;
 
@@ -100,6 +109,11 @@ final class core_course_course extends base {
         $DB->execute($sql);
     }
 
+    /**
+     * Course completion observer.
+     *
+     * @param \core\event\course_completed $event
+     */
     public static function observe_course_completed(\core\event\course_completed $event): void {
         global $DB;
 
@@ -153,6 +167,11 @@ final class core_course_course extends base {
         }
     }
 
+    /**
+     * Course deletion observer.
+     *
+     * @param \core\event\course_deleted $event
+     */
     public static function observe_course_deleted(\core\event\course_deleted $event): void {
         global $DB;
 

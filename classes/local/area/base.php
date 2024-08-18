@@ -100,7 +100,16 @@ abstract class base {
         }
     }
 
+    /**
+     * SQL select for the area fields.
+     *
+     * @param string $alias custom field category table
+     * @return string
+     */
     abstract public static function get_category_select(string $alias): string;
 
+    /**
+     * Synchronise cached values of completions for each field area type.
+     */
     abstract public static function sync_area_completions(): void;
 }
