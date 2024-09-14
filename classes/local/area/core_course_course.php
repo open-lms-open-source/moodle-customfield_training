@@ -194,4 +194,34 @@ final class core_course_course extends base {
                  )";
         $DB->execute($sql, $params);
     }
+
+    /**
+     * Hook callback.
+     *
+     * @param \enrol_programs\hook\course_completions_purged $hook
+     */
+    public static function program_course_completions_purged(\enrol_programs\hook\course_completions_purged $hook): void {
+        global $DB;
+
+        $params = ['programid' => $hook->programid, 'userid' => $hook->userid];
+
+        $sql = "DELETE
+                  FROM {customfield_training_completions}
+                 WHERE userid = :userid AND instanceid IN (
+
+                     SELECT pi.courseid
+                       FROM {enrol_programs_items} pi
+                      WHERE pi.programid = :programid AND pi.courseid IS NOT NULL
+
+                       ) AND EXISTS (
+
+                    SELECT 'x'
+                      FROM {customfield_field} cf
+                      JOIN {customfield_category} cat ON cat.id = cf.categoryid AND cat.component = 'core_course' AND cat.area = 'course'
+                     WHERE {customfield_training_completions}.fieldid = cf.id
+                           AND cf.type = 'training'
+
+                 )";
+        $DB->execute($sql, $params);
+    }
 }

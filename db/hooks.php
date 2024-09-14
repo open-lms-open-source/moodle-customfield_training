@@ -15,20 +15,17 @@
 // along with Moodle.  If not, see <https://www.gnu.org/licenses/>.
 
 /**
- * Customfield training plugin
+ * Customfield training hook callbacks.
  *
- * @package   customfield_training
- * @copyright 2024 Open LMS
- * @author    Petr Skoda
- * @license   https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
- * @link      https://www.openlms.net/
+ * @package    customfield_training
+ * @copyright  2024 Open LMS
+ * @author     Petr Skoda
+ * @license    https://www.gnu.org/copyleft/gpl.html GNU GPL v3 or later
  */
 
-$plugin->component = 'customfield_training';
-$plugin->version   = 2024091400;
-$plugin->requires  = 2023100902.00; // 4.3.2
-$plugin->supported = [403, 403];
-
-$plugin->dependencies = [
-    'local_openlms' => 2024032500,
+$callbacks = [
+    [
+        'hook' => \enrol_programs\hook\course_completions_purged::class,
+        'callback' => \customfield_training\local\area\core_course_course::class . '::program_course_completions_purged',
+    ],
 ];
