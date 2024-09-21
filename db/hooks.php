@@ -26,6 +26,6 @@
 $callbacks = [
     [
         'hook' => \enrol_programs\hook\course_completions_purged::class,
-        'callback' => \customfield_training\local\area\core_course_course::class . '::program_course_completions_purged',
+        'callback' => [\customfield_training\local\area\core_course_course::class, 'program_course_completions_purged'],
     ],
 ];
