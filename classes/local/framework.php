@@ -245,7 +245,7 @@ final class framework {
     public static function is_deletable(\stdClass $framework): bool {
 
         $hook = new \customfield_training\hook\framework_usage($framework->id);
-        \core\hook\manager::get_instance()->dispatch($hook);
+        \core\di::get(\core\hook\manager::class)->dispatch($hook);
 
         if ($hook->get_usage()) {
             return false;

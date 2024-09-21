@@ -162,7 +162,7 @@ final class core_course_course extends base {
             if ($frameworkids) {
                 // This should trigger things like program completion recalculation when user completes course.
                 $hook = new \customfield_training\hook\completion_updated($userid, $frameworkids);
-                \core\hook\manager::get_instance()->dispatch($hook);
+                \core\di::get(\core\hook\manager::class)->dispatch($hook);
             }
         }
     }
