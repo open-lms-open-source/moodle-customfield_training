@@ -67,7 +67,7 @@ if (has_capability('customfield/training:manageframeworks', $context)) {
 
 if ($buttons) {
     $buttons = implode(' ', $buttons);
-    echo $OUTPUT->box($buttons, 'buttons float-right');
+    echo $OUTPUT->box($buttons, 'buttons float-end');
 }
 
 if ($framework->description) {

@@ -91,7 +91,7 @@ echo $OUTPUT->header();
 
 $contextoptions = management::get_used_contexts_menu($context);
 
-echo '<div class="framework-category-selector float-right">';
+echo '<div class="framework-category-selector float-end">';
 $changecontexturl = new moodle_url($currenturl);
 $changecontexturl->remove_all_params();
 echo $OUTPUT->single_select($changecontexturl, 'contextid', $contextoptions, $contextid, [], 'frameworkcategoryselect',
@@ -110,7 +110,7 @@ if (!$archived && has_capability('customfield/training:manageframeworks', $conte
     $addbutton = new local_openlms\output\dialog_form\button($addurl, get_string('framework_create', 'customfield_training'));
     $addbutton->set_after_submit($addbutton::AFTER_SUBMIT_REDIRECT);
     $button = $dialogformoutput->render($addbutton);
-    echo '<div class="buttons float-right">';
+    echo '<div class="buttons float-end">';
     echo $button;
     echo '</div>';
 }
